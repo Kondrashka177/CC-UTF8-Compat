@@ -52,7 +52,7 @@ public class TerminalWidgetMixin {
     @Final
     private int innerY;
 
-    @Inject(method = "renderWidget", at = @At("TAIL"), remap = false)
+    @Inject(method = {"renderWidget", "m_87963_"}, at = @At("TAIL"), remap = false)
     private void tfg$renderUnicodeOverlay(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
@@ -141,7 +141,7 @@ public class TerminalWidgetMixin {
         return output.asReadOnlyBuffer();
     }
 
-    @Inject(method = "charTyped", at = @At("HEAD"), cancellable = true, remap = false)
+    @Inject(method = {"charTyped", "m_5534_"}, at = @At("HEAD"), cancellable = true, remap = false)
     private void tfg$charTypedUtf8(char ch, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
@@ -159,5 +159,6 @@ public class TerminalWidgetMixin {
             input.tfg$charTypedCodepoint(ch);
             cir.setReturnValue(true);
         }
+
     }
 }
