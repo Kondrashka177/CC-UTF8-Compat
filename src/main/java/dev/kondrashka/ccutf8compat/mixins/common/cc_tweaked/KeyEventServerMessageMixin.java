@@ -1,0 +1,57 @@
+package dev.kondrashka.ccutf8compat.mixins.common.cc_tweaked;
+
+import java.nio.charset.StandardCharsets;
+
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import dan200.computercraft.shared.computer.menu.ComputerMenu;
+import dan200.computercraft.shared.network.server.KeyEventServerMessage;
+import dan200.computercraft.shared.network.server.ServerNetworkContext;
+
+import dev.kondrashka.ccutf8compat.config.CcUtf8CompatConfig;
+
+
+/**
+ * Preserves UTF-8 input bytes before keyboard events reach the server terminal.
+ */
+
+@Mixin(value = KeyEventServerMessage.class, remap = false)
+public class KeyEventServerMessageMixin {
+
+    @Shadow
+    @Final
+    private KeyEventServerMessage.Action type;
+
+    @Shadow
+    @Final
+    private int key;
+
+    @Inject(method = "handle", at = @At("HEAD"), cancellable = true, remap = false)
+    private void tfg$handleUtf8Char(ServerNetworkContext context, ComputerMenu container, CallbackInfo ci) {
+        if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
+            return;
+        }
+
+        if (type != KeyEventServerMessage.Action.CHAR || key <= 255) {
+            return;
+        }
+
+        if (key == 0 || key == '\r' || key == '\n') {
+            ci.cancel();
+            return;
+        }
+
+        var text = new String(Character.toChars(key));
+
+        container.getComputer().queueEvent("char", new Object[] {
+                text.getBytes(StandardCharsets.UTF_8)
+        });
+
+        ci.cancel();
+    }
+}

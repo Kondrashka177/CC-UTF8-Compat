@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import dan200.computercraft.core.terminal.TextBuffer;
 
 import dev.kondrashka.ccutf8compat.config.CcUtf8CompatConfig;
+import dev.kondrashka.ccutf8compat.access.CcUtf8TextBufferAccess;
 
 /**
  * Stores Unicode codepoints alongside CC:Tweaked's legacy text buffer so terminal cells can keep UTF-8 text.

@@ -1,7 +1,7 @@
-package dev.kondrashka.ccutf8compat.mixins.common.cc_tweaked;
+package dev.kondrashka.ccutf8compat.access;
 
 /**
- * Exposes UTF-8 codepoints stored alongside CC:Tweaked's text buffer.
+ * Exposes UTF-8 terminal state data used by network synchronization.
  */
 
 public interface CcUtf8TextBufferAccess {
