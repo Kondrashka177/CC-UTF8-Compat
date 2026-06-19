@@ -53,16 +53,16 @@ public class TerminalWidgetMixin {
     private int innerY;
 
     @Inject(method = {"renderWidget", "m_87963_"}, at = @At("TAIL"), remap = false)
-    private void tfg$renderUnicodeOverlay(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+    private void ccUtf8$renderUnicodeOverlay(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
 
-        tfg$renderUnicodeOverlay(graphics);
+        ccUtf8$renderUnicodeOverlay(graphics);
     }
 
     @Unique
-    private void tfg$renderUnicodeOverlay(GuiGraphics graphics) {
+    private void ccUtf8$renderUnicodeOverlay(GuiGraphics graphics) {
         var font = Minecraft.getInstance().font;
         var palette = terminal.getPalette();
 
@@ -73,7 +73,7 @@ public class TerminalWidgetMixin {
             var textAccess = (CcUtf8TextBufferAccess) (Object) textLine;
 
             for (var x = 0; x < textLine.length(); x++) {
-                var codepoint = textAccess.tfg$codePointAt(x);
+                var codepoint = textAccess.ccUtf8$codePointAt(x);
 
                 if (codepoint >= 0 && codepoint <= 255) {
                     continue;
@@ -100,13 +100,13 @@ public class TerminalWidgetMixin {
     }
 
     @Inject(method = "paste", at = @At("HEAD"), cancellable = true, remap = false)
-    private void tfg$pasteUtf8(CallbackInfo ci) {
+    private void ccUtf8$pasteUtf8(CallbackInfo ci) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
 
         var clipboard = Minecraft.getInstance().keyboardHandler.getClipboard();
-        var paste = tfg$encodePasteUtf8(clipboard);
+        var paste = ccUtf8$encodePasteUtf8(clipboard);
 
         if (paste.remaining() > 0) {
             computer.paste(paste);
@@ -116,7 +116,7 @@ public class TerminalWidgetMixin {
     }
 
     @Unique
-    private static ByteBuffer tfg$encodePasteUtf8(String clipboard) {
+    private static ByteBuffer ccUtf8$encodePasteUtf8(String clipboard) {
         var output = ByteBuffer.allocate(StringUtil.MAX_PASTE_LENGTH);
         var iterator = clipboard.codePoints().iterator();
 
@@ -142,7 +142,7 @@ public class TerminalWidgetMixin {
     }
 
     @Inject(method = {"charTyped", "m_5534_"}, at = @At("HEAD"), cancellable = true, remap = false)
-    private void tfg$charTypedUtf8(char ch, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+    private void ccUtf8$charTypedUtf8(char ch, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
@@ -156,7 +156,7 @@ public class TerminalWidgetMixin {
         }
 
         if (computer instanceof CcUtf8ClientInputAccess input) {
-            input.tfg$charTypedCodepoint(ch);
+            input.ccUtf8$charTypedCodepoint(ch);
             cir.setReturnValue(true);
         }
 

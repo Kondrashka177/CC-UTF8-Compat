@@ -22,19 +22,19 @@ import dev.kondrashka.ccutf8compat.access.CcUtf8TerminalStateAccess;
 public class TerminalStateMixin implements CcUtf8TerminalStateAccess {
 
     @Unique
-    private static final int tfg$UTF8_MARKER = 0x54464755;
+    private static final int ccUtf8$UTF8_MARKER = 0x54464755;
 
     @Unique
-    private int[] tfg$utf8Text;
+    private int[] ccUtf8$utf8Text;
 
     @Unique
-    private byte[] tfg$utf8Colours;
+    private byte[] ccUtf8$utf8Colours;
 
     @Unique
-    private byte[] tfg$utf8Palette;
+    private byte[] ccUtf8$utf8Palette;
 
     @Inject(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V", at = @At("RETURN"), remap = false)
-    private void tfg$readUtf8Data(FriendlyByteBuf buf, CallbackInfo ci) {
+    private void ccUtf8$readUtf8Data(FriendlyByteBuf buf, CallbackInfo ci) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
@@ -45,7 +45,7 @@ public class TerminalStateMixin implements CcUtf8TerminalStateAccess {
 
         var readerIndex = buf.readerIndex();
 
-        if (buf.readInt() != tfg$UTF8_MARKER) {
+        if (buf.readInt() != ccUtf8$UTF8_MARKER) {
             buf.readerIndex(readerIndex);
             return;
         }
@@ -57,64 +57,64 @@ public class TerminalStateMixin implements CcUtf8TerminalStateAccess {
             text[i] = buf.readVarInt();
         }
 
-        tfg$utf8Text = text;
-        tfg$utf8Colours = buf.readByteArray();
-        tfg$utf8Palette = buf.readByteArray();
+        ccUtf8$utf8Text = text;
+        ccUtf8$utf8Colours = buf.readByteArray();
+        ccUtf8$utf8Palette = buf.readByteArray();
     }
 
     @Inject(method = "write", at = @At("TAIL"), remap = false)
-    private void tfg$writeUtf8Data(FriendlyByteBuf buf, CallbackInfo ci) {
+    private void ccUtf8$writeUtf8Data(FriendlyByteBuf buf, CallbackInfo ci) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
 
-        if (tfg$utf8Text == null || tfg$utf8Colours == null || tfg$utf8Palette == null) {
+        if (ccUtf8$utf8Text == null || ccUtf8$utf8Colours == null || ccUtf8$utf8Palette == null) {
             return;
         }
 
-        buf.writeInt(tfg$UTF8_MARKER);
+        buf.writeInt(ccUtf8$UTF8_MARKER);
 
-        buf.writeVarInt(tfg$utf8Text.length);
-        for (var codepoint : tfg$utf8Text) {
+        buf.writeVarInt(ccUtf8$utf8Text.length);
+        for (var codepoint : ccUtf8$utf8Text) {
             buf.writeVarInt(codepoint);
         }
 
-        buf.writeByteArray(tfg$utf8Colours);
-        buf.writeByteArray(tfg$utf8Palette);
+        buf.writeByteArray(ccUtf8$utf8Colours);
+        buf.writeByteArray(ccUtf8$utf8Palette);
     }
 
     @Inject(method = "size", at = @At("RETURN"), cancellable = true, remap = false)
-    private void tfg$size(CallbackInfoReturnable<Integer> cir) {
+    private void ccUtf8$size(CallbackInfoReturnable<Integer> cir) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
 
-        if (tfg$utf8Text == null || tfg$utf8Colours == null || tfg$utf8Palette == null) {
+        if (ccUtf8$utf8Text == null || ccUtf8$utf8Colours == null || ccUtf8$utf8Palette == null) {
             return;
         }
 
-        cir.setReturnValue(cir.getReturnValue() + tfg$utf8Text.length * Integer.BYTES + tfg$utf8Colours.length + tfg$utf8Palette.length + 8);
+        cir.setReturnValue(cir.getReturnValue() + ccUtf8$utf8Text.length * Integer.BYTES + ccUtf8$utf8Colours.length + ccUtf8$utf8Palette.length + 8);
     }
 
     @Override
-    public int[] tfg$getUtf8Text() {
-        return tfg$utf8Text;
+    public int[] ccUtf8$getUtf8Text() {
+        return ccUtf8$utf8Text;
     }
 
     @Override
-    public byte[] tfg$getUtf8Colours() {
-        return tfg$utf8Colours;
+    public byte[] ccUtf8$getUtf8Colours() {
+        return ccUtf8$utf8Colours;
     }
 
     @Override
-    public byte[] tfg$getUtf8Palette() {
-        return tfg$utf8Palette;
+    public byte[] ccUtf8$getUtf8Palette() {
+        return ccUtf8$utf8Palette;
     }
 
     @Override
-    public void tfg$setUtf8Data(int[] text, byte[] colours, byte[] palette) {
-        tfg$utf8Text = text;
-        tfg$utf8Colours = colours;
-        tfg$utf8Palette = palette;
+    public void ccUtf8$setUtf8Data(int[] text, byte[] colours, byte[] palette) {
+        ccUtf8$utf8Text = text;
+        ccUtf8$utf8Colours = colours;
+        ccUtf8$utf8Palette = palette;
     }
 }

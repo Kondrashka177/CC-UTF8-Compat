@@ -35,7 +35,7 @@ public class MonitorTextureBufferShaderMixin {
             var textAccess = (CcUtf8TextBufferAccess) (Object) text;
 
             for (var x = 0; x < width; x++) {
-                var codepoint = enabled ? textAccess.tfg$codePointAt(x) : text.charAt(x);
+                var codepoint = enabled ? textAccess.ccUtf8$codePointAt(x) : text.charAt(x);
 
                 if (enabled && (codepoint < 0 || codepoint > 255)) {
                     codepoint = 0;

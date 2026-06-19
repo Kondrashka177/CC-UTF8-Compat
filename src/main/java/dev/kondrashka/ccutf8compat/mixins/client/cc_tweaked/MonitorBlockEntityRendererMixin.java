@@ -36,7 +36,7 @@ import dev.kondrashka.ccutf8compat.access.CcUtf8TextBufferAccess;
 public class MonitorBlockEntityRendererMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Ldan200/computercraft/client/render/monitor/MonitorBlockEntityRenderer;renderTerminal(Lorg/joml/Matrix4f;Ldan200/computercraft/shared/peripheral/monitor/ClientMonitor;Ldan200/computercraft/client/render/monitor/MonitorRenderState;Ldan200/computercraft/core/terminal/Terminal;FF)V"), remap = false)
-    private void tfg$renderTerminalWithUnicode(
+    private void ccUtf8$renderTerminalWithUnicode(
             Matrix4f matrix,
             ClientMonitor monitor,
             MonitorRenderState renderState,
@@ -49,17 +49,17 @@ public class MonitorBlockEntityRendererMixin {
             MultiBufferSource bufferSource,
             int lightmapCoord,
             int overlayLight) {
-        tfg$renderTerminal(matrix, monitor, renderState, terminal, xMargin, yMargin);
+        ccUtf8$renderTerminal(matrix, monitor, renderState, terminal, xMargin, yMargin);
 
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
 
-        tfg$renderUnicodeOverlay(transform, bufferSource, terminal);
+        ccUtf8$renderUnicodeOverlay(transform, bufferSource, terminal);
     }
 
     @Unique
-    private static void tfg$renderUnicodeOverlay(PoseStack transform, MultiBufferSource bufferSource, Terminal terminal) {
+    private static void ccUtf8$renderUnicodeOverlay(PoseStack transform, MultiBufferSource bufferSource, Terminal terminal) {
         var font = Minecraft.getInstance().font;
         var palette = terminal.getPalette();
 
@@ -74,7 +74,7 @@ public class MonitorBlockEntityRendererMixin {
             var textAccess = (CcUtf8TextBufferAccess) (Object) textLine;
 
             for (var x = 0; x < textLine.length(); x++) {
-                var codepoint = textAccess.tfg$codePointAt(x);
+                var codepoint = textAccess.ccUtf8$codePointAt(x);
 
                 if (codepoint >= 0 && codepoint <= 255) {
                     continue;
@@ -105,7 +105,7 @@ public class MonitorBlockEntityRendererMixin {
     }
 
     @Invoker("renderTerminal")
-    private static void tfg$renderTerminal(
+    private static void ccUtf8$renderTerminal(
             Matrix4f matrix,
             ClientMonitor monitor,
             MonitorRenderState renderState,

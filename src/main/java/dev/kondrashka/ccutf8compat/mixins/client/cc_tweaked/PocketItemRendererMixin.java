@@ -32,7 +32,7 @@ import dev.kondrashka.ccutf8compat.access.CcUtf8TextBufferAccess;
 public class PocketItemRendererMixin {
 
     @Redirect(method = "renderItem", at = @At(value = "INVOKE", target = "Ldan200/computercraft/client/render/text/FixedWidthFontRenderer;drawTerminal(Ldan200/computercraft/client/render/text/FixedWidthFontRenderer$QuadEmitter;FFLdan200/computercraft/core/terminal/Terminal;FFFF)V"), remap = false)
-    private void tfg$drawTerminalWithUnicode(
+    private void ccUtf8$drawTerminalWithUnicode(
             FixedWidthFontRenderer.QuadEmitter emitter,
             float x,
             float y,
@@ -59,11 +59,11 @@ public class PocketItemRendererMixin {
             return;
         }
 
-        tfg$renderUnicodeOverlay(transform, bufferSource, terminal, x, y);
+        ccUtf8$renderUnicodeOverlay(transform, bufferSource, terminal, x, y);
     }
 
     @Unique
-    private static void tfg$renderUnicodeOverlay(
+    private static void ccUtf8$renderUnicodeOverlay(
             PoseStack transform,
             MultiBufferSource bufferSource,
             Terminal terminal,
@@ -83,7 +83,7 @@ public class PocketItemRendererMixin {
             var textAccess = (CcUtf8TextBufferAccess) (Object) textLine;
 
             for (var x = 0; x < textLine.length(); x++) {
-                var codepoint = textAccess.tfg$codePointAt(x);
+                var codepoint = textAccess.ccUtf8$codePointAt(x);
 
                 if (codepoint >= 0 && codepoint <= 255) {
                     continue;

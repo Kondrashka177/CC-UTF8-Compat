@@ -28,47 +28,47 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
     private char[] text;
 
     @Unique
-    private int[] tfg$codepoints;
+    private int[] ccUtf8$codepoints;
 
     @Inject(method = "<init>(CI)V", at = @At("RETURN"), remap = false)
-    private void tfg$initFromChar(char c, int length, CallbackInfo ci) {
-        tfg$codepoints = new int[text.length];
+    private void ccUtf8$initFromChar(char c, int length, CallbackInfo ci) {
+        ccUtf8$codepoints = new int[text.length];
 
         for (var i = 0; i < text.length; i++) {
-            tfg$codepoints[i] = c;
+            ccUtf8$codepoints[i] = c;
         }
     }
 
     @Inject(method = "<init>(Ljava/lang/String;)V", at = @At("RETURN"), remap = false)
-    private void tfg$initFromString(String value, CallbackInfo ci) {
-        tfg$codepoints = new int[text.length];
+    private void ccUtf8$initFromString(String value, CallbackInfo ci) {
+        ccUtf8$codepoints = new int[text.length];
 
         for (var i = 0; i < text.length; i++) {
-            tfg$codepoints[i] = text[i];
+            ccUtf8$codepoints[i] = text[i];
         }
     }
 
     @Unique
-    private int[] tfg$getCodepoints() {
-        if (tfg$codepoints == null || tfg$codepoints.length != text.length) {
-            tfg$codepoints = new int[text.length];
+    private int[] ccUtf8$getCodepoints() {
+        if (ccUtf8$codepoints == null || ccUtf8$codepoints.length != text.length) {
+            ccUtf8$codepoints = new int[text.length];
 
             for (var i = 0; i < text.length; i++) {
-                tfg$codepoints[i] = text[i];
+                ccUtf8$codepoints[i] = text[i];
             }
         }
 
-        return tfg$codepoints;
+        return ccUtf8$codepoints;
     }
 
     @Unique
-    private void tfg$setFallbackChar(int index, int codepoint) {
+    private void ccUtf8$setFallbackChar(int index, int codepoint) {
         text[index] = codepoint >= 0 && codepoint <= Character.MAX_VALUE ? (char) codepoint : '?';
     }
 
     @Unique
-    private void tfg$writeCodepoints(String value, int start) {
-        var codepoints = tfg$getCodepoints();
+    private void ccUtf8$writeCodepoints(String value, int start) {
+        var codepoints = ccUtf8$getCodepoints();
         var source = value.codePoints().toArray();
 
         var pos = start;
@@ -81,7 +81,7 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
             var codepoint = source[i - pos];
 
             codepoints[i] = codepoint;
-            tfg$setFallbackChar(i, codepoint);
+            ccUtf8$setFallbackChar(i, codepoint);
         }
     }
 
@@ -106,18 +106,18 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
 
             for (var i = start; i < end; i++) {
                 text[i] = value.charAt(i - pos);
-                tfg$getCodepoints()[i] = text[i];
+                ccUtf8$getCodepoints()[i] = text[i];
             }
 
             return;
         }
 
-        tfg$writeCodepoints(value, start);
+        ccUtf8$writeCodepoints(value, start);
     }
 
     @Overwrite(remap = false)
     public void write(ByteBuffer value, int start) {
-        var codepoints = tfg$getCodepoints();
+        var codepoints = ccUtf8$getCodepoints();
 
         var pos = start;
         var bufferPos = value.position();
@@ -138,16 +138,16 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
 
     @Overwrite(remap = false)
     public void write(TextBuffer value) {
-        var codepoints = tfg$getCodepoints();
+        var codepoints = ccUtf8$getCodepoints();
         var access = (CcUtf8TextBufferAccess) (Object) value;
 
         var end = Math.min(value.length(), codepoints.length);
 
         for (var i = 0; i < end; i++) {
-            var codepoint = access.tfg$codePointAt(i);
+            var codepoint = access.ccUtf8$codePointAt(i);
 
             codepoints[i] = codepoint;
-            tfg$setFallbackChar(i, codepoint);
+            ccUtf8$setFallbackChar(i, codepoint);
         }
     }
 
@@ -158,7 +158,7 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
 
     @Overwrite(remap = false)
     public void fill(char c, int start, int end) {
-        var codepoints = tfg$getCodepoints();
+        var codepoints = ccUtf8$getCodepoints();
 
         start = Math.max(start, 0);
         end = Math.min(end, codepoints.length);
@@ -175,7 +175,7 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
             return text[index];
         }
 
-        var codepoint = tfg$getCodepoints()[index];
+        var codepoint = ccUtf8$getCodepoints()[index];
 
         return codepoint >= 0 && codepoint <= Character.MAX_VALUE ? (char) codepoint : '?';
     }
@@ -184,20 +184,20 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
     public void setChar(int index, char c) {
         if (index >= 0 && index < text.length) {
             text[index] = c;
-            tfg$getCodepoints()[index] = c;
+            ccUtf8$getCodepoints()[index] = c;
         }
     }
 
     @Override
-    public int tfg$codePointAt(int index) {
-        return tfg$getCodepoints()[index];
+    public int ccUtf8$codePointAt(int index) {
+        return ccUtf8$getCodepoints()[index];
     }
 
     @Override
-    public void tfg$setCodePoint(int index, int codepoint) {
+    public void ccUtf8$setCodePoint(int index, int codepoint) {
         if (index >= 0 && index < text.length) {
-            tfg$getCodepoints()[index] = codepoint;
-            tfg$setFallbackChar(index, codepoint);
+            ccUtf8$getCodepoints()[index] = codepoint;
+            ccUtf8$setFallbackChar(index, codepoint);
         }
     }
 
@@ -207,7 +207,7 @@ public class TextBufferMixin implements CcUtf8TextBufferAccess {
             return new String(text);
         }
 
-        var codepoints = tfg$getCodepoints();
+        var codepoints = ccUtf8$getCodepoints();
 
         return new String(codepoints, 0, codepoints.length);
     }

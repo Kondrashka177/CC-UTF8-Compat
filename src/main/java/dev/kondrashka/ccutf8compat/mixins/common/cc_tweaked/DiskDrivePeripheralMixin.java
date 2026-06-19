@@ -26,18 +26,18 @@ import dev.kondrashka.ccutf8compat.config.CcUtf8CompatConfig;
 public class DiskDrivePeripheralMixin {
 
     @Redirect(method = "setDiskLabel", at = @At(value = "INVOKE", target = "Ljava/util/Optional;map(Ljava/util/function/Function;)Ljava/util/Optional;"), remap = false)
-    private Optional<String> tfg$normaliseDiskLabelUtf8(
+    private Optional<String> ccUtf8$normaliseDiskLabelUtf8(
             Optional<String> label,
             Function<? super String, ? extends String> mapper) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return label.map(mapper);
         }
 
-        return label.map(value -> tfg$normaliseLabelUtf8(tfg$decodeUtf8OrLegacy(value)));
+        return label.map(value -> ccUtf8$normaliseLabelUtf8(ccUtf8$decodeUtf8OrLegacy(value)));
     }
 
     @Inject(method = "getDiskLabel", at = @At("RETURN"), cancellable = true, remap = false)
-    private void tfg$getDiskLabelUtf8(CallbackInfoReturnable<Object[]> cir) {
+    private void ccUtf8$getDiskLabelUtf8(CallbackInfoReturnable<Object[]> cir) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
@@ -48,11 +48,11 @@ public class DiskDrivePeripheralMixin {
             return;
         }
 
-        cir.setReturnValue(new Object[] { tfg$encodeUtf8ForLua(label) });
+        cir.setReturnValue(new Object[] { ccUtf8$encodeUtf8ForLua(label) });
     }
 
     @Unique
-    private static String tfg$decodeUtf8OrLegacy(String text) {
+    private static String ccUtf8$decodeUtf8OrLegacy(String text) {
         var bytes = new byte[text.length()];
 
         for (var i = 0; i < text.length(); i++) {
@@ -78,7 +78,7 @@ public class DiskDrivePeripheralMixin {
     }
 
     @Unique
-    private static String tfg$encodeUtf8ForLua(String text) {
+    private static String ccUtf8$encodeUtf8ForLua(String text) {
         var bytes = text.getBytes(StandardCharsets.UTF_8);
         var out = new StringBuilder(bytes.length);
 
@@ -90,7 +90,7 @@ public class DiskDrivePeripheralMixin {
     }
 
     @Unique
-    private static String tfg$normaliseLabelUtf8(String label) {
+    private static String ccUtf8$normaliseLabelUtf8(String label) {
         var out = new StringBuilder();
         var count = 0;
 

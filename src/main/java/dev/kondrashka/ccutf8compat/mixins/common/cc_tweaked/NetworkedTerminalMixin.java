@@ -29,10 +29,10 @@ import dev.kondrashka.ccutf8compat.access.CcUtf8TextBufferAccess;
 public class NetworkedTerminalMixin {
 
     @Unique
-    private static final String tfg$BASE_16 = "0123456789abcdef";
+    private static final String ccUtf8$BASE_16 = "0123456789abcdef";
 
     @Unique
-    private TerminalState tfg$createVanillaState(NetworkedTerminal terminal, byte[] contents) {
+    private TerminalState ccUtf8$createVanillaState(NetworkedTerminal terminal, byte[] contents) {
         var buf = new FriendlyByteBuf(Unpooled.buffer());
 
         buf.writeBoolean(terminal.isColour());
@@ -48,7 +48,7 @@ public class NetworkedTerminalMixin {
     }
 
     @Unique
-    private byte[] tfg$createVanillaContents(NetworkedTerminal terminal) {
+    private byte[] ccUtf8$createVanillaContents(NetworkedTerminal terminal) {
         var width = terminal.getWidth();
         var height = terminal.getHeight();
         var palette = terminal.getPalette();
@@ -81,7 +81,7 @@ public class NetworkedTerminalMixin {
     }
 
     @Inject(method = "write", at = @At("HEAD"), cancellable = true, remap = false)
-    private void tfg$writeUtf8State(CallbackInfoReturnable<TerminalState> cir) {
+    private void ccUtf8$writeUtf8State(CallbackInfoReturnable<TerminalState> cir) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
@@ -107,7 +107,7 @@ public class NetworkedTerminalMixin {
             var access = (CcUtf8TextBufferAccess) (Object) textLine;
 
             for (var x = 0; x < width; x++) {
-                textContents[textIdx++] = access.tfg$codePointAt(x);
+                textContents[textIdx++] = access.ccUtf8$codePointAt(x);
             }
 
             for (var x = 0; x < width; x++) {
@@ -122,22 +122,22 @@ public class NetworkedTerminalMixin {
             }
         }
 
-        var state = tfg$createVanillaState(terminal, tfg$createVanillaContents(terminal));
-        ((CcUtf8TerminalStateAccess) state).tfg$setUtf8Data(textContents, colours, paletteBytes);
+        var state = ccUtf8$createVanillaState(terminal, ccUtf8$createVanillaContents(terminal));
+        ((CcUtf8TerminalStateAccess) state).ccUtf8$setUtf8Data(textContents, colours, paletteBytes);
 
         cir.setReturnValue(state);
     }
 
     @Inject(method = "read", at = @At("HEAD"), cancellable = true, remap = false)
-    private void tfg$readUtf8State(TerminalState state, CallbackInfo ci) {
+    private void ccUtf8$readUtf8State(TerminalState state, CallbackInfo ci) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
 
         var utf8State = (CcUtf8TerminalStateAccess) state;
-        var textContents = utf8State.tfg$getUtf8Text();
-        var colours = utf8State.tfg$getUtf8Colours();
-        var paletteBytes = utf8State.tfg$getUtf8Palette();
+        var textContents = utf8State.ccUtf8$getUtf8Text();
+        var colours = utf8State.ccUtf8$getUtf8Colours();
+        var paletteBytes = utf8State.ccUtf8$getUtf8Palette();
 
         if (textContents == null || colours == null || paletteBytes == null) {
             return;
@@ -146,11 +146,11 @@ public class NetworkedTerminalMixin {
         var access = (TerminalStateAccessor) (Object) state;
         var terminal = (NetworkedTerminal) (Object) this;
 
-        terminal.resize(access.tfg$getWidth(), access.tfg$getHeight());
-        terminal.setCursorPos(access.tfg$getCursorX(), access.tfg$getCursorY());
-        terminal.setCursorBlink(access.tfg$getCursorBlink());
-        terminal.setBackgroundColour(access.tfg$getCursorBgColour());
-        terminal.setTextColour(access.tfg$getCursorFgColour());
+        terminal.resize(access.ccUtf8$getWidth(), access.ccUtf8$getHeight());
+        terminal.setCursorPos(access.ccUtf8$getCursorX(), access.ccUtf8$getCursorY());
+        terminal.setCursorBlink(access.ccUtf8$getCursorBlink());
+        terminal.setBackgroundColour(access.ccUtf8$getCursorBgColour());
+        terminal.setTextColour(access.ccUtf8$getCursorFgColour());
 
         var width = terminal.getWidth();
         var height = terminal.getHeight();
@@ -167,14 +167,14 @@ public class NetworkedTerminalMixin {
             var textAccess = (CcUtf8TextBufferAccess) (Object) textLine;
 
             for (var x = 0; x < width; x++) {
-                textAccess.tfg$setCodePoint(x, textContents[textIdx++]);
+                textAccess.ccUtf8$setCodePoint(x, textContents[textIdx++]);
             }
 
             for (var x = 0; x < width; x++) {
                 var packedColour = colours[colourIdx++];
 
-                backColourLine.setChar(x, tfg$BASE_16.charAt((packedColour >> 4) & 0xF));
-                textColourLine.setChar(x, tfg$BASE_16.charAt(packedColour & 0xF));
+                backColourLine.setChar(x, ccUtf8$BASE_16.charAt((packedColour >> 4) & 0xF));
+                textColourLine.setChar(x, ccUtf8$BASE_16.charAt(packedColour & 0xF));
             }
         }
 

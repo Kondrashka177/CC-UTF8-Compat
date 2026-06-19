@@ -20,7 +20,6 @@ import dan200.computercraft.impl.AbstractComputerCraftAPI;
 import dan200.computercraft.shared.computer.core.ResourceMount;
 
 import dev.kondrashka.ccutf8compat.CcUtf8Compat;
-import net.minecraft.resources.ResourceLocation;
 import dev.kondrashka.ccutf8compat.config.CcUtf8CompatConfig;
 
 /**
@@ -42,26 +41,26 @@ public class ResourceMountMixin {
     private ResourceManager manager;
 
     @Unique
-    private static final String tfg$CC_NAMESPACE = "computercraft";
+    private static final String ccUtf8$CC_NAMESPACE = "computercraft";
 
     @Unique
-    private static final String tfg$CC_LUA_PATH = "lua";
+    private static final String ccUtf8$CC_LUA_PATH = "lua";
 
     @Inject(method = "getFileContents", at = @At("HEAD"), cancellable = true, remap = false)
-    private void tfg$getFileContents(String path, @Coerce Object file, CallbackInfoReturnable<byte[]> cir) throws IOException {
+    private void ccUtf8$getFileContents(String path, @Coerce Object file, CallbackInfoReturnable<byte[]> cir) throws IOException {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
 
-        if (!tfg$CC_NAMESPACE.equals(namespace)) {
+        if (!ccUtf8$CC_NAMESPACE.equals(namespace)) {
             return;
         }
 
-        if (!tfg$isLuaPath(subPath)) {
+        if (!ccUtf8$isLuaPath(subPath)) {
             return;
         }
 
-        var overrideLocation = tfg$overrideLocation(subPath + "/" + path);
+        var overrideLocation = ccUtf8$overrideLocation(subPath + "/" + path);
         var resource = manager.getResource(overrideLocation).orElse(null);
 
         if (resource == null) {
@@ -74,12 +73,12 @@ public class ResourceMountMixin {
     }
 
     @Unique
-    private static boolean tfg$isLuaPath(String path) {
-        return tfg$CC_LUA_PATH.equals(path) || path.startsWith(tfg$CC_LUA_PATH + "/");
+    private static boolean ccUtf8$isLuaPath(String path) {
+        return ccUtf8$CC_LUA_PATH.equals(path) || path.startsWith(ccUtf8$CC_LUA_PATH + "/");
     }
 
     @Unique
-    private static ResourceLocation tfg$overrideLocation(String path) {
+    private static ResourceLocation ccUtf8$overrideLocation(String path) {
         return ResourceLocation.fromNamespaceAndPath(CcUtf8Compat.MOD_ID, "computercraft/" + path);
     }
 }
@@ -92,13 +91,13 @@ public class ResourceMountMixin {
 class AbstractComputerCraftAPIMixin {
 
     @Unique
-    private static final String tfg$CC_NAMESPACE = "computercraft";
+    private static final String ccUtf8$CC_NAMESPACE = "computercraft";
 
     @Unique
-    private static final String tfg$CC_LUA_PATH = "lua";
+    private static final String ccUtf8$CC_LUA_PATH = "lua";
 
     @Inject(method = "getResourceFile", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void tfg$getResourceFile(
+    private static void ccUtf8$getResourceFile(
             MinecraftServer server,
             String domain,
             String subPath,
@@ -107,15 +106,15 @@ class AbstractComputerCraftAPIMixin {
             return;
         }
 
-        if (!tfg$CC_NAMESPACE.equals(domain)) {
+        if (!ccUtf8$CC_NAMESPACE.equals(domain)) {
             return;
         }
 
-        if (!tfg$isLuaPath(subPath)) {
+        if (!ccUtf8$isLuaPath(subPath)) {
             return;
         }
 
-        var overrideLocation = tfg$overrideLocation(subPath);
+        var overrideLocation = ccUtf8$overrideLocation(subPath);
         var resource = server.getResourceManager().getResource(overrideLocation).orElse(null);
 
         if (resource == null) {
@@ -129,12 +128,12 @@ class AbstractComputerCraftAPIMixin {
     }
 
     @Unique
-    private static boolean tfg$isLuaPath(String path) {
-        return tfg$CC_LUA_PATH.equals(path) || path.startsWith(tfg$CC_LUA_PATH + "/");
+    private static boolean ccUtf8$isLuaPath(String path) {
+        return ccUtf8$CC_LUA_PATH.equals(path) || path.startsWith(ccUtf8$CC_LUA_PATH + "/");
     }
 
     @Unique
-    private static ResourceLocation tfg$overrideLocation(String path) {
+    private static ResourceLocation ccUtf8$overrideLocation(String path) {
         return ResourceLocation.fromNamespaceAndPath(CcUtf8Compat.MOD_ID, "computercraft/" + path);
     }
 }

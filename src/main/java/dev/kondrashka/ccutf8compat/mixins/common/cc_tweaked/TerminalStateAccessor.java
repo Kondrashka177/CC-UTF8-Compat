@@ -13,23 +13,23 @@ import dan200.computercraft.shared.computer.terminal.TerminalState;
 public interface TerminalStateAccessor {
 
     @Accessor("width")
-    int tfg$getWidth();
+    int ccUtf8$getWidth();
 
     @Accessor("height")
-    int tfg$getHeight();
+    int ccUtf8$getHeight();
 
     @Accessor("cursorX")
-    int tfg$getCursorX();
+    int ccUtf8$getCursorX();
 
     @Accessor("cursorY")
-    int tfg$getCursorY();
+    int ccUtf8$getCursorY();
 
     @Accessor("cursorBlink")
-    boolean tfg$getCursorBlink();
+    boolean ccUtf8$getCursorBlink();
 
     @Accessor("cursorBgColour")
-    int tfg$getCursorBgColour();
+    int ccUtf8$getCursorBgColour();
 
     @Accessor("cursorFgColour")
-    int tfg$getCursorFgColour();
+    int ccUtf8$getCursorFgColour();
 }

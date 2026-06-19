@@ -13,5 +13,5 @@ import dan200.computercraft.shared.peripheral.printer.PrinterBlockEntity;
 public interface PrinterBlockEntityAccessor {
 
     @Invoker("setPageTitle")
-    void tfg$setPageTitle(String title);
+    void ccUtf8$setPageTitle(String title);
 }

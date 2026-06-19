@@ -32,7 +32,7 @@ public class OSAPIMixin {
     private IAPIEnvironment apiEnvironment;
 
     @Inject(method = "getComputerLabel", at = @At("HEAD"), cancellable = true, remap = false)
-    private void tfg$getComputerLabelUtf8(CallbackInfoReturnable<Object[]> cir) {
+    private void ccUtf8$getComputerLabelUtf8(CallbackInfoReturnable<Object[]> cir) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
@@ -44,25 +44,25 @@ public class OSAPIMixin {
             return;
         }
 
-        cir.setReturnValue(new Object[] { tfg$encodeUtf8ForLua(label) });
+        cir.setReturnValue(new Object[] { ccUtf8$encodeUtf8ForLua(label) });
     }
 
     @Inject(method = "setComputerLabel", at = @At("HEAD"), cancellable = true, remap = false)
-    private void tfg$setComputerLabelUtf8(Optional<String> label, CallbackInfo ci) {
+    private void ccUtf8$setComputerLabelUtf8(Optional<String> label, CallbackInfo ci) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
 
         apiEnvironment.setLabel(label
-                .map(OSAPIMixin::tfg$decodeUtf8OrLegacy)
-                .map(OSAPIMixin::tfg$normaliseLabelUtf8)
+                .map(OSAPIMixin::ccUtf8$decodeUtf8OrLegacy)
+                .map(OSAPIMixin::ccUtf8$normaliseLabelUtf8)
                 .orElse(null));
 
         ci.cancel();
     }
 
     @Unique
-    private static String tfg$decodeUtf8OrLegacy(String text) {
+    private static String ccUtf8$decodeUtf8OrLegacy(String text) {
         var bytes = new byte[text.length()];
 
         for (var i = 0; i < text.length(); i++) {
@@ -88,7 +88,7 @@ public class OSAPIMixin {
     }
 
     @Unique
-    private static String tfg$normaliseLabelUtf8(String label) {
+    private static String ccUtf8$normaliseLabelUtf8(String label) {
         var out = new StringBuilder();
         var count = 0;
 
@@ -111,7 +111,7 @@ public class OSAPIMixin {
     }
 
     @Unique
-    private static String tfg$encodeUtf8ForLua(String text) {
+    private static String ccUtf8$encodeUtf8ForLua(String text) {
         var bytes = text.getBytes(StandardCharsets.UTF_8);
         var out = new StringBuilder(bytes.length);
 

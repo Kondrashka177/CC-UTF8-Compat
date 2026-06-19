@@ -32,7 +32,7 @@ public class KeyEventServerMessageMixin {
     private int key;
 
     @Inject(method = "handle", at = @At("HEAD"), cancellable = true, remap = false)
-    private void tfg$handleUtf8Char(ServerNetworkContext context, ComputerMenu container, CallbackInfo ci) {
+    private void ccUtf8$handleUtf8Char(ServerNetworkContext context, ComputerMenu container, CallbackInfo ci) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }

@@ -27,18 +27,18 @@ public class DirectFixedWidthFontRendererMixin {
 
         for (var i = 0; i < text.length(); i++) {
             var colour = palette.getRenderColours(15 - Terminal.getColour(textColour.charAt(i), Colour.BLACK));
-            var codepoint = enabled ? textAccess.tfg$codePointAt(i) : text.charAt(i);
+            var codepoint = enabled ? textAccess.ccUtf8$codePointAt(i) : text.charAt(i);
 
             if (enabled && (codepoint < 0 || codepoint > 255)) {
                 continue;
             }
 
-            tfg$drawChar(emitter, x + i * 6, y, codepoint, colour);
+            ccUtf8$drawChar(emitter, x + i * 6, y, codepoint, colour);
         }
     }
 
     @Invoker("drawChar")
-    private static void tfg$drawChar(DirectFixedWidthFontRenderer.QuadEmitter emitter, float x, float y, int index, int colour) {
+    private static void ccUtf8$drawChar(DirectFixedWidthFontRenderer.QuadEmitter emitter, float x, float y, int index, int colour) {
         throw new AssertionError();
     }
 }

@@ -31,7 +31,7 @@ public abstract class TermMethodsMixin {
     protected abstract Terminal getTerminal();
 
     @Unique
-    private static String tfg$decodeUtf8OrLegacy(String text) {
+    private static String ccUtf8$decodeUtf8OrLegacy(String text) {
         var bytes = new byte[text.length()];
 
         for (var i = 0; i < text.length(); i++) {
@@ -57,12 +57,12 @@ public abstract class TermMethodsMixin {
     }
 
     @Inject(method = "write", at = @At("HEAD"), cancellable = true, remap = false)
-    private void tfg$writeUtf8(Coerced<String> textA, CallbackInfo ci) throws LuaException {
+    private void ccUtf8$writeUtf8(Coerced<String> textA, CallbackInfo ci) throws LuaException {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
 
-        var text = tfg$decodeUtf8OrLegacy(textA.value());
+        var text = ccUtf8$decodeUtf8OrLegacy(textA.value());
         var width = text.codePointCount(0, text.length());
         var terminal = getTerminal();
 
@@ -75,7 +75,7 @@ public abstract class TermMethodsMixin {
     }
 
     @Unique
-    private static byte[] tfg$copyBytes(ByteBuffer buffer) {
+    private static byte[] ccUtf8$copyBytes(ByteBuffer buffer) {
         var copy = buffer.slice();
         var bytes = new byte[copy.remaining()];
 
@@ -85,7 +85,7 @@ public abstract class TermMethodsMixin {
     }
 
     @Unique
-    private static String tfg$decodeUtf8Bytes(byte[] bytes) {
+    private static String ccUtf8$decodeUtf8Bytes(byte[] bytes) {
         var decoder = StandardCharsets.UTF_8
                 .newDecoder()
                 .onMalformedInput(CodingErrorAction.REPORT)
@@ -99,7 +99,7 @@ public abstract class TermMethodsMixin {
     }
 
     @Unique
-    private static int[] tfg$getUtf8Offsets(int[] codepoints) {
+    private static int[] ccUtf8$getUtf8Offsets(int[] codepoints) {
         var offsets = new int[codepoints.length];
         var offset = 0;
 
@@ -112,7 +112,7 @@ public abstract class TermMethodsMixin {
     }
 
     @Unique
-    private static char tfg$getColour(ByteBuffer buffer, int byteIndex, int charIndex, int byteLength, int charLength) {
+    private static char ccUtf8$getColour(ByteBuffer buffer, int byteIndex, int charIndex, int byteLength, int charLength) {
         var position = buffer.position();
 
         if (buffer.remaining() == charLength) {
@@ -123,20 +123,20 @@ public abstract class TermMethodsMixin {
     }
 
     @Inject(method = "blit", at = @At("HEAD"), cancellable = true, remap = false)
-    private void tfg$blitUtf8(ByteBuffer text, ByteBuffer textColour, ByteBuffer backgroundColour, CallbackInfo ci) throws LuaException {
+    private void ccUtf8$blitUtf8(ByteBuffer text, ByteBuffer textColour, ByteBuffer backgroundColour, CallbackInfo ci) throws LuaException {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
 
-        var textBytes = tfg$copyBytes(text);
-        var decoded = tfg$decodeUtf8Bytes(textBytes);
+        var textBytes = ccUtf8$copyBytes(text);
+        var decoded = ccUtf8$decodeUtf8Bytes(textBytes);
 
         if (decoded == null) {
             return;
         }
 
         var codepoints = decoded.codePoints().toArray();
-        var offsets = tfg$getUtf8Offsets(codepoints);
+        var offsets = ccUtf8$getUtf8Offsets(codepoints);
 
         var textColourLength = textColour.remaining();
         var backgroundColourLength = backgroundColour.remaining();
@@ -169,9 +169,9 @@ public abstract class TermMethodsMixin {
 
                     var byteIndex = offsets[i];
 
-                    textAccess.tfg$setCodePoint(x, codepoints[i]);
-                    textColourLine.setChar(x, tfg$getColour(textColour, byteIndex, i, textBytes.length, codepoints.length));
-                    backgroundColourLine.setChar(x, tfg$getColour(backgroundColour, byteIndex, i, textBytes.length, codepoints.length));
+                    textAccess.ccUtf8$setCodePoint(x, codepoints[i]);
+                    textColourLine.setChar(x, ccUtf8$getColour(textColour, byteIndex, i, textBytes.length, codepoints.length));
+                    backgroundColourLine.setChar(x, ccUtf8$getColour(backgroundColour, byteIndex, i, textBytes.length, codepoints.length));
                 }
             }
 

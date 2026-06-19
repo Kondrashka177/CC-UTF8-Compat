@@ -35,7 +35,7 @@ import dev.kondrashka.ccutf8compat.access.CcUtf8TextBufferAccess;
 public class CustomLecternRendererMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Ldan200/computercraft/client/render/CustomLecternRenderer;renderPocketTerminal(Lcom/mojang/blaze3d/vertex/PoseStack;Ldan200/computercraft/client/render/text/FixedWidthFontRenderer$QuadEmitter;Ldan200/computercraft/core/terminal/Terminal;)V"), remap = false)
-    private void tfg$renderPocketTerminalWithUnicode(
+    private void ccUtf8$renderPocketTerminalWithUnicode(
             PoseStack poseStack,
             FixedWidthFontRenderer.QuadEmitter quadEmitter,
             Terminal terminal,
@@ -45,7 +45,7 @@ public class CustomLecternRendererMixin {
             MultiBufferSource buffer,
             int packedLight,
             int packedOverlay) {
-        var margin = tfg$applyScaledPocketComputerTerminalTransform(poseStack, terminal);
+        var margin = ccUtf8$applyScaledPocketComputerTerminalTransform(poseStack, terminal);
 
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             FixedWidthFontRenderer.drawTerminal(
@@ -73,11 +73,11 @@ public class CustomLecternRendererMixin {
 
         FixedWidthFontRenderer.drawCursor(quadEmitter, 0, 0, terminal);
 
-        tfg$renderUnicodeOverlay(poseStack, buffer, terminal);
+        ccUtf8$renderUnicodeOverlay(poseStack, buffer, terminal);
     }
 
     @Unique
-    private static Vector2f tfg$applyScaledPocketComputerTerminalTransform(PoseStack poseStack, Terminal terminal) {
+    private static Vector2f ccUtf8$applyScaledPocketComputerTerminalTransform(PoseStack poseStack, Terminal terminal) {
         var width = terminal.getWidth() * FONT_WIDTH;
         var height = terminal.getHeight() * FONT_HEIGHT;
 
@@ -96,7 +96,7 @@ public class CustomLecternRendererMixin {
     }
 
     @Unique
-    private static void tfg$renderUnicodeOverlay(PoseStack poseStack, MultiBufferSource buffer, Terminal terminal) {
+    private static void ccUtf8$renderUnicodeOverlay(PoseStack poseStack, MultiBufferSource buffer, Terminal terminal) {
         var font = Minecraft.getInstance().font;
         var palette = terminal.getPalette();
 
@@ -111,7 +111,7 @@ public class CustomLecternRendererMixin {
             var textAccess = (CcUtf8TextBufferAccess) (Object) textLine;
 
             for (var x = 0; x < textLine.length(); x++) {
-                var codepoint = textAccess.tfg$codePointAt(x);
+                var codepoint = textAccess.ccUtf8$codePointAt(x);
 
                 if (codepoint <= 0 || codepoint == ' ') {
                     continue;

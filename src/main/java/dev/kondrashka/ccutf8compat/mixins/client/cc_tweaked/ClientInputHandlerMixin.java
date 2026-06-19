@@ -25,7 +25,7 @@ public class ClientInputHandlerMixin implements CcUtf8ClientInputAccess {
     private AbstractContainerMenu menu;
 
     @Override
-    public void tfg$charTypedCodepoint(int codepoint) {
+    public void ccUtf8$charTypedCodepoint(int codepoint) {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }

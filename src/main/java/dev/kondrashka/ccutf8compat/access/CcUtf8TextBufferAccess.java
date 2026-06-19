@@ -1,12 +1,12 @@
 package dev.kondrashka.ccutf8compat.access;
 
 /**
- * Exposes UTF-8 terminal state data used by network synchronization.
+ * Exposes UTF-8 codepoints stored alongside CC:Tweaked's terminal text buffer
  */
 
 public interface CcUtf8TextBufferAccess {
 
-    int tfg$codePointAt(int index);
+    int ccUtf8$codePointAt(int index);
 
-    void tfg$setCodePoint(int index, int codepoint);
+    void ccUtf8$setCodePoint(int index, int codepoint);
 }

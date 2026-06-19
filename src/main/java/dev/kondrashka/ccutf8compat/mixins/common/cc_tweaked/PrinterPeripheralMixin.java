@@ -39,7 +39,7 @@ public class PrinterPeripheralMixin {
     }
 
     @Unique
-    private static String tfg$decodeUtf8OrLegacy(String text) {
+    private static String ccUtf8$decodeUtf8OrLegacy(String text) {
         var bytes = new byte[text.length()];
 
         for (var i = 0; i < text.length(); i++) {
@@ -65,7 +65,7 @@ public class PrinterPeripheralMixin {
     }
 
     @Unique
-    private static String tfg$normaliseTitle(String title) {
+    private static String ccUtf8$normaliseTitle(String title) {
         var out = new StringBuilder();
         var count = 0;
 
@@ -88,12 +88,12 @@ public class PrinterPeripheralMixin {
     }
 
     @Inject(method = "write", at = @At("HEAD"), cancellable = true, remap = false)
-    private void tfg$writeUtf8(Coerced<String> textA, CallbackInfo ci) throws LuaException {
+    private void ccUtf8$writeUtf8(Coerced<String> textA, CallbackInfo ci) throws LuaException {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
 
-        var text = tfg$decodeUtf8OrLegacy(textA.value());
+        var text = ccUtf8$decodeUtf8OrLegacy(textA.value());
         var page = getCurrentPage();
 
         page.write(text);
@@ -103,7 +103,7 @@ public class PrinterPeripheralMixin {
     }
 
     @Inject(method = "setPageTitle", at = @At("HEAD"), cancellable = true, remap = false)
-    private void tfg$setPageTitleUtf8(Optional<String> title, CallbackInfo ci) throws LuaException {
+    private void ccUtf8$setPageTitleUtf8(Optional<String> title, CallbackInfo ci) throws LuaException {
         if (!CcUtf8CompatConfig.ENABLE_CC_UTF8_COMPAT.get()) {
             return;
         }
@@ -111,11 +111,11 @@ public class PrinterPeripheralMixin {
         getCurrentPage();
 
         var decoded = title
-                .map(PrinterPeripheralMixin::tfg$decodeUtf8OrLegacy)
-                .map(PrinterPeripheralMixin::tfg$normaliseTitle)
+                .map(PrinterPeripheralMixin::ccUtf8$decodeUtf8OrLegacy)
+                .map(PrinterPeripheralMixin::ccUtf8$normaliseTitle)
                 .orElse("");
 
-        ((PrinterBlockEntityAccessor) (Object) printer).tfg$setPageTitle(decoded);
+        ((PrinterBlockEntityAccessor) (Object) printer).ccUtf8$setPageTitle(decoded);
 
         ci.cancel();
     }

@@ -1,16 +1,16 @@
 package dev.kondrashka.ccutf8compat.access;
 
 /**
- * Exposes raw UTF-8 client input data used by keyboard handling.
+ * Exposes UTF-8 terminal state data used by network synchronization.
  */
 
 public interface CcUtf8TerminalStateAccess {
 
-    int[] tfg$getUtf8Text();
+    int[] ccUtf8$getUtf8Text();
 
-    byte[] tfg$getUtf8Colours();
+    byte[] ccUtf8$getUtf8Colours();
 
-    byte[] tfg$getUtf8Palette();
+    byte[] ccUtf8$getUtf8Palette();
 
-    void tfg$setUtf8Data(int[] text, byte[] colours, byte[] palette);
+    void ccUtf8$setUtf8Data(int[] text, byte[] colours, byte[] palette);
 }

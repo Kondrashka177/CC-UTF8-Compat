@@ -33,7 +33,7 @@ import dev.kondrashka.ccutf8compat.access.CcUtf8TextBufferAccess;
 public class PrintoutRendererMixin {
 
     @Inject(method = "drawText(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IIII[Ldan200/computercraft/core/terminal/TextBuffer;[Ldan200/computercraft/core/terminal/TextBuffer;)V", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void tfg$drawTextUtf8(
+    private static void ccUtf8$drawTextUtf8(
             PoseStack transform,
             MultiBufferSource bufferSource,
             int x,
@@ -54,14 +54,14 @@ public class PrintoutRendererMixin {
                 break;
             }
 
-            tfg$drawLine(transform, bufferSource, x, y + line * FONT_HEIGHT, light, text[index], colours[index]);
+            ccUtf8$drawLine(transform, bufferSource, x, y + line * FONT_HEIGHT, light, text[index], colours[index]);
         }
 
         ci.cancel();
     }
 
     @Inject(method = "drawText(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IIII[Ljava/lang/String;[Ljava/lang/String;)V", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void tfg$drawStringTextUtf8(
+    private static void ccUtf8$drawStringTextUtf8(
             PoseStack transform,
             MultiBufferSource bufferSource,
             int x,
@@ -82,7 +82,7 @@ public class PrintoutRendererMixin {
                 break;
             }
 
-            tfg$drawLine(
+            ccUtf8$drawLine(
                     transform,
                     bufferSource,
                     x,
@@ -96,7 +96,7 @@ public class PrintoutRendererMixin {
     }
 
     @Unique
-    private static void tfg$drawLine(
+    private static void ccUtf8$drawLine(
             PoseStack transform,
             MultiBufferSource bufferSource,
             int startX,
@@ -109,7 +109,7 @@ public class PrintoutRendererMixin {
         var textAccess = (CcUtf8TextBufferAccess) (Object) textLine;
 
         for (var x = 0; x < textLine.length(); x++) {
-            var codepoint = textAccess.tfg$codePointAt(x);
+            var codepoint = textAccess.ccUtf8$codePointAt(x);
 
             if (codepoint <= 0 || codepoint == ' ') {
                 continue;

@@ -6,5 +6,5 @@ package dev.kondrashka.ccutf8compat.access;
 
 public interface CcUtf8ClientInputAccess {
 
-    void tfg$charTypedCodepoint(int codepoint);
+    void ccUtf8$charTypedCodepoint(int codepoint);
 }
