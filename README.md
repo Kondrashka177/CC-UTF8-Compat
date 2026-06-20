@@ -38,7 +38,7 @@ Required files:
 ```text
 mods/
   cc-tweaked-1.20.1-forge-1.116.1.jar
-  cc_utf8_compat-1.0.0.jar
+  cc_utf8_compat-1.0.1-beta.1.jar
 ```
 
 For singleplayer, place both mods in the client `mods` folder.
