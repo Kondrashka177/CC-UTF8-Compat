@@ -32,20 +32,6 @@ Version 1.1.0-beta.1 was tested with Forge 47.4.10 and CC:Tweaked 1.121.0. It is
 
 **Important:** CC:Tweaked is no longer published to CurseForge. Download **CC:Tweaked 1.121.0** from [Modrinth](https://modrinth.com/mod/cc-tweaked/versions), selecting Minecraft 1.20.1 and Forge. Do not use the outdated CC:Tweaked version available from CurseForge for this release.
 
-## Installation
-
-1. Download CC:Tweaked **1.121.0** for Minecraft 1.20.1 Forge from Modrinth.
-2. Download CC UTF-8 Compat **1.1.0-beta.1** from [GitHub Releases](https://github.com/Kondrashka177/CC-UTF8-Compat/releases) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/cc-utf-8-compat).
-3. Place both `.jar` files in your Minecraft `mods` folder.
-4. For multiplayer, install both mods on **the client and the server**.
-
-Example:
-
-```text
-mods/
-  cc-tweaked-1.20.1-forge-1.121.0.jar
-  cc_utf8_compat-1.1.0-beta.1.jar
-```
 
 ## Configuration
 
