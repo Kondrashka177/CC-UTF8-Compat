@@ -23,7 +23,7 @@ import dan200.computercraft.client.render.text.FixedWidthFontRenderer;
 import dan200.computercraft.core.terminal.Terminal;
 import dan200.computercraft.core.util.Colour;
 import dan200.computercraft.core.util.StringUtil;
-import dan200.computercraft.shared.computer.core.InputHandler;
+import dan200.computercraft.core.input.UserComputerInput;
 
 import dev.kondrashka.ccutf8compat.config.CcUtf8CompatConfig;
 import dev.kondrashka.ccutf8compat.access.CcUtf8TextBufferAccess;
@@ -38,7 +38,7 @@ public class TerminalWidgetMixin {
 
     @Shadow
     @Final
-    private InputHandler computer;
+    private UserComputerInput computerInput;
 
     @Shadow
     @Final
@@ -109,7 +109,7 @@ public class TerminalWidgetMixin {
         var paste = ccUtf8$encodePasteUtf8(clipboard);
 
         if (paste.remaining() > 0) {
-            computer.paste(paste);
+            computerInput.paste(paste);
         }
 
         ci.cancel();
@@ -155,10 +155,11 @@ public class TerminalWidgetMixin {
             return;
         }
 
-        if (computer instanceof CcUtf8ClientInputAccess input) {
-            input.ccUtf8$charTypedCodepoint(ch);
-            cir.setReturnValue(true);
-        }
+        CcUtf8ClientInputAccess input =
+                (CcUtf8ClientInputAccess) (Object) computerInput;
+
+        input.ccUtf8$charTypedCodepoint(ch);
+        cir.setReturnValue(true);
 
     }
 }

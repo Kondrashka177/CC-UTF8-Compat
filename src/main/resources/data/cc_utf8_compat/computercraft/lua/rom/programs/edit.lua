@@ -809,6 +809,7 @@ while bRunning do
     elseif event[1] == "term_resize" then
         w, h = term.getSize()
         setCursor(x, y)
+        term.clear()
         redrawMenu()
         redrawText()
 

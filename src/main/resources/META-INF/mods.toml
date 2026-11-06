@@ -29,6 +29,6 @@ side="BOTH"
 [[dependencies.${mod_id}]]
 modId="computercraft"
 mandatory=true
-versionRange="[1.116.1,1.117.0)"
+versionRange="[1.121.0,1.121.1)"
 ordering="AFTER"
 side="BOTH"

@@ -18,7 +18,8 @@
     "common.cc_tweaked.TextBufferMixin"
   ],
   "client": [
-    "client.cc_tweaked.ClientInputHandlerMixin",
+    "client.cc_tweaked.ClientComputerInputMixin",
+    "client.cc_tweaked.UserComputerInputMixin",
     "client.cc_tweaked.CustomLecternRendererMixin",
     "client.cc_tweaked.DirectFixedWidthFontRendererMixin",
     "client.cc_tweaked.FixedWidthFontRendererMixin",
