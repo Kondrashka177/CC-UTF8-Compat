@@ -19,19 +19,21 @@ The mod improves UTF-8 text handling in CC:Tweaked terminals and related periphe
 
 | CC UTF-8 Compat | Minecraft | Loader | CC:Tweaked |
 | --- | --- | --- | --- |
-| **1.1.0-beta.1** | **1.20.1** | **Forge** | **1.121.0** |
+| **1.1.1-beta.1** | **1.20.1** | **Forge** | **1.122.0 or newer** |
+| 1.1.0-beta.1 | 1.20.1 | Forge | 1.121.0 |
 | 1.0.1-beta.1 (legacy) | 1.20.1 | Forge | 1.116.1 |
 
-Version 1.1.0-beta.1 was tested with Forge 47.4.10 and CC:Tweaked 1.121.0. It is version-specific and is not intended for other CC:Tweaked versions. Previous releases remain available for reference but are not recommended for public servers using older, vulnerable CC:Tweaked versions.
+Version 1.1.1-beta.1 targets CC:Tweaked 1.122.0 and was tested with Forge 47.4.10. Newer CC:Tweaked versions are allowed, but compatibility is not guaranteed until tested. For CC:Tweaked 1.121.0, use CC UTF-8 Compat 1.1.0-beta.1.
 
 ## Requirements
 
 - Minecraft **1.20.1**
 - Minecraft **Forge** (tested with **47.4.10**)
-- **CC:Tweaked 1.121.0 for Forge**
+- **CC:Tweaked 1.122.0 or newer for Forge** (tested with **1.122.0**)
 
-**Important:** CC:Tweaked is no longer published to CurseForge. Download **CC:Tweaked 1.121.0** from [Modrinth](https://modrinth.com/mod/cc-tweaked/versions), selecting Minecraft 1.20.1 and Forge. Do not use the outdated CC:Tweaked version available from CurseForge for this release.
+For multiplayer, install CC UTF-8 Compat on both the client and server.
 
+**Important:** CC:Tweaked is no longer updated on CurseForge. Download the required version from [Modrinth](https://modrinth.com/mod/cc-tweaked/versions), selecting Minecraft 1.20.1 and Forge.
 
 ## Configuration
 
@@ -51,13 +53,15 @@ Set it to `false` to disable the patches without removing the mod.
 
 ## Security note
 
-CC:Tweaked **1.121.0** fixes a security vulnerability in the HTTP API. **CC UTF-8 Compat does not itself fix that vulnerability**; updating the CC:Tweaked dependency is required.
+CC:Tweaked **1.121.0** introduced a security fix for its HTTP API. **CC UTF-8 Compat does not itself fix that vulnerability**; updating the CC:Tweaked dependency is required.
+
+Legacy releases targeting vulnerable CC:Tweaked versions are not recommended for production servers.
 
 See the [official CC:Tweaked security advisory](https://github.com/cc-tweaked/CC-Tweaked/security/advisories/GHSA-g5h5-fp5g-fmx4).
 
 ## Known limitations
 
-CC UTF-8 Compat patches internal CC:Tweaked classes using mixins and replaces selected CraftOS Lua files. Changes to CC:Tweaked internals can break compatibility, so support is limited to the versions listed above.
+CC UTF-8 Compat patches internal CC:Tweaked classes using mixins and replaces selected CraftOS Lua files. Changes to CC:Tweaked internals can break compatibility. The minimum dependency version is not a guarantee of compatibility with future releases.
 
 This release is a beta. Test it in your modpack before deploying it to a production server.
 
